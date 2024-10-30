@@ -8,7 +8,7 @@ A ideia deste projeto é ser uma base de um projeto que já separa o domínio da
 
 O projeto está organizado da seguinte 
 
-base-project-ddd-with-golang/
+```base-project-ddd-with-golang/
 │
 ├── cmd/                     # Ponto de entrada da aplicação
 │
@@ -25,7 +25,7 @@ base-project-ddd-with-golang/
 │   ├── repository/          # Implementações dos repositórios para BD
 │   └── models/              # Modelos do GORM para BD
 │
-└── README.md                # Documentação
+└── README.md                # Documentação ```
 
 
 ### Principais Diretórios e Arquivos
