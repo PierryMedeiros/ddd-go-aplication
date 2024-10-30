@@ -4,7 +4,7 @@ import (
     "testing"
     "desafio-ddd-go/domain/product/entity"
     "desafio-ddd-go/infrastructure/product/repository"
-    "desafio-ddd-go/infrastructure/product/repository/orm"
+    orm "desafio-ddd-go/infrastructure/models"
     "gorm.io/driver/sqlite"
     "gorm.io/gorm"
     "github.com/stretchr/testify/assert"
@@ -15,6 +15,7 @@ func setupTestDB() (*gorm.DB, error) {
     if err != nil {
         return nil, err
     }
+    
     if err := db.AutoMigrate(&orm.ProductModel{}); err != nil {
         return nil, err
     }

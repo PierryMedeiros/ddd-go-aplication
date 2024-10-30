@@ -1,4 +1,4 @@
-package orm
+package models
 
 import (
     "gorm.io/gorm"
@@ -10,6 +10,6 @@ type ProductModel struct {
     Price float64 `gorm:"not null"`          
 }
 
-func Migrate(db *gorm.DB) error {
+func (*ProductModel) Migrate(db *gorm.DB) error {
     return db.AutoMigrate(&ProductModel{}) 
 }

@@ -1,4 +1,4 @@
-package orm
+package models
 
 import (
     "gorm.io/gorm"
@@ -15,6 +15,6 @@ type CustomerModel struct {
     RewardPoints int    `gorm:"not null"`
 }
 
-func Migrate(db *gorm.DB) error {
+func (*CustomerModel) Migrate(db *gorm.DB) error {
     return db.AutoMigrate(&CustomerModel{})
 }

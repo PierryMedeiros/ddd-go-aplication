@@ -20,7 +20,7 @@ func TestProductFactory_Create(t *testing.T) {
         assert.Nil(t, err)
         assert.NotNil(t, product)
         assert.Equal(t, "Product B", product.GetName())
-        assert.Equal(t, 200.0, product.GetPrice()) // Preço dobrado
+        assert.Equal(t, 200.0, product.GetPrice())
     })
 
     t.Run("Invalid Product Type", func(t *testing.T) {

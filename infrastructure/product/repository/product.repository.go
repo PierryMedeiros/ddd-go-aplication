@@ -3,7 +3,7 @@ package repository
 import (
     "gorm.io/gorm"
     "desafio-ddd-go/domain/product/entity"
-    "desafio-ddd-go/infrastructure/product/repository/orm"
+    orm "desafio-ddd-go/infrastructure/models"
 )
 
 type ProductRepository struct {

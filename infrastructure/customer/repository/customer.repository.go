@@ -3,7 +3,7 @@ package repository
 import (
 	customerEntity "desafio-ddd-go/domain/customer/entity"
 	valueobject "desafio-ddd-go/domain/customer/value-object"
-	"desafio-ddd-go/infrastructure/customer/repository/orm"
+	orm "desafio-ddd-go/infrastructure/models"
 	"errors"
 
 	"gorm.io/gorm"

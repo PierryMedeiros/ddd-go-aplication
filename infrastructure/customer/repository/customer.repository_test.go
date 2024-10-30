@@ -4,7 +4,7 @@ import (
 	entity "desafio-ddd-go/domain/customer/entity"
 	"desafio-ddd-go/domain/customer/value-object"
 	"desafio-ddd-go/infrastructure/customer/repository"
-	"desafio-ddd-go/infrastructure/customer/repository/orm"
+	orm "desafio-ddd-go/infrastructure/models"
 	"testing"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

@@ -26,6 +26,10 @@ func (o *Order) GetID() string {
     return o.ID
 }
 
+func (o *Order) GetTotal() float64 {
+    return o.Total
+}
+
 func (o *Order) GetCustomerID() string {
     return o.CustomerID
 }
