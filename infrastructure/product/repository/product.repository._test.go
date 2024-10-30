@@ -18,6 +18,7 @@ func setupTestDB() (*gorm.DB, error) {
     if err := db.AutoMigrate(&orm.ProductModel{}); err != nil {
         return nil, err
     }
+    
     return db, nil
 }
 

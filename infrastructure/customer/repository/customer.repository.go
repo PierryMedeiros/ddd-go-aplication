@@ -1,58 +1,62 @@
 package repository
 
 import (
-    "desafio-ddd-go/domain/customer/entity"
-    "desafio-ddd-go/domain/customer/value-object"
-    "desafio-ddd-go/infrastructure/customer/repository/orm"
-    "errors"
-    "gorm.io/gorm"
+	customerEntity "desafio-ddd-go/domain/customer/entity"
+	valueobject "desafio-ddd-go/domain/customer/value-object"
+	"desafio-ddd-go/infrastructure/customer/repository/orm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 type CustomerRepository struct {
-    DB *gorm.DB
+	db *gorm.DB
 }
 
-func (r *CustomerRepository) Create(cust *customer.Customer) error {
-    customerModel := orm.CustomerModel{
-        ID:           cust.GetId(),
-        Name:         cust.GetName(),
-        Street:       cust.GetAddress().Street,
-        Number:       cust.GetAddress().Number,
-        Zipcode:      cust.GetAddress().Zip,
-        City:         cust.GetAddress().City,
-        Active:       cust.IsActive(),
-        RewardPoints: cust.GetRewardPoints(),
-    }
-    return r.DB.Create(&customerModel).Error
+func NewCustomerRepository(db *gorm.DB) *CustomerRepository {
+	return &CustomerRepository{db: db}
 }
 
-func (r *CustomerRepository) Update(cust *customer.Customer) error {
-    customerModel := orm.CustomerModel{
-        ID:           cust.GetId(),
-        Name:         cust.GetName(),
-        Street:       cust.GetAddress().Street,
-        Number:       cust.GetAddress().Number,
-        Zipcode:      cust.GetAddress().Zip,
-        City:         cust.GetAddress().City,
-        Active:       cust.IsActive(),
-        RewardPoints: cust.GetRewardPoints(),
-    }
-    return r.DB.Model(&orm.CustomerModel{}).Where("id = ?", cust.GetId()).Updates(&customerModel).Error
+func (r *CustomerRepository) Create(entity *customerEntity.Customer) error {
+	address := entity.GetAddress()
+	customerModel := orm.CustomerModel{
+		ID:           entity.GetId(),
+		Name:         entity.GetName(),
+		Street:       address.Street,
+		Number:       address.Number,
+		Zipcode:      address.Zip,
+		City:         address.City,
+		Active:       entity.IsActive(),
+		RewardPoints: entity.GetRewardPoints(),
+	}
+	return r.db.Create(&customerModel).Error
 }
 
-func (r *CustomerRepository) Find(id string) (*customer.Customer, error) {
-    var customerModel orm.CustomerModel
-    if err := r.DB.First(&customerModel, "id = ?", id).Error; err != nil {
-        if errors.Is(err, gorm.ErrRecordNotFound) {
-            return nil, errors.New("customer not found")
-        }
-        return nil, err
-    }
+func (r *CustomerRepository) Update(entity *customerEntity.Customer) error {
+	address := entity.GetAddress()
+	return r.db.Model(&orm.CustomerModel{}).Where("id = ?", entity.GetId()).Updates(orm.CustomerModel{
+		Name:         entity.GetName(),
+		Street:       address.Street,
+		Number:       address.Number,
+		Zipcode:      address.Zip,
+		City:         address.City,
+		Active:       entity.IsActive(),
+		RewardPoints: entity.GetRewardPoints(),
+	}).Error
+}
 
-    cust, err := customer.NewCustomer(customerModel.ID, customerModel.Name)
-    if err != nil {
-        return nil, err
-    }
+func (r *CustomerRepository) Find(id string) (*customerEntity.Customer, error) {
+	var customerModel orm.CustomerModel
+	if err := r.db.First(&customerModel, "id = ?", id).Error; err != nil {
+		return nil, errors.New("customer not found")
+	}
+
+	customer, err := customerEntity.NewCustomer(customerModel.ID, customerModel.Name)
+	if err != nil {
+		return nil, err
+	}
+
+
 
     address := valueobject.Address{
         Street:  customerModel.Street,
@@ -60,43 +64,45 @@ func (r *CustomerRepository) Find(id string) (*customer.Customer, error) {
         Zip: customerModel.Zipcode,
         City:    customerModel.City,
     }
-    cust.ChangeAddress(&address)
+    
+    customer.ChangeAddress(&address)
 
-    if customerModel.Active {
-        cust.Activate()
-    }
-    cust.AddRewardPoints(customerModel.RewardPoints)
+	customer.ChangeAddress(&address)
+	if customerModel.Active {
+		customer.Activate()
+	}
+	customer.AddRewardPoints(customerModel.RewardPoints)
 
-    return cust, nil
+	return customer, nil
 }
 
-func (r *CustomerRepository) FindAll() ([]*customer.Customer, error) {
-    var customerModels []orm.CustomerModel
-    if err := r.DB.Find(&customerModels).Error; err != nil {
-        return nil, err
-    }
+func (r *CustomerRepository) FindAll() ([]*customerEntity.Customer, error) {
+	var customerModels []orm.CustomerModel
+	if err := r.db.Find(&customerModels).Error; err != nil {
+		return nil, err
+	}
 
-    customers := make([]*customer.Customer, len(customerModels))
-    for i, customerModel := range customerModels {
-        cust, err := customer.NewCustomer(customerModel.ID, customerModel.Name)
-        if err != nil {
-            return nil, err
+	var customers []*customerEntity.Customer
+	for _, model := range customerModels {
+		customer, err := customerEntity.NewCustomer(model.ID, model.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		address := valueobject.Address{
+            Street:  model.Street,
+            Number:  model.Number,
+            Zip: model.Zipcode,
+            City:    model.City,
         }
+		customer.ChangeAddress(&address)
+		if model.Active {
+			customer.Activate()
+		}
+		customer.AddRewardPoints(model.RewardPoints)
 
-        address := valueobject.Address{
-            Street:  customerModel.Street,
-            Number:  customerModel.Number,
-            Zip: customerModel.Zipcode,
-            City:    customerModel.City,
-        }
-        cust.ChangeAddress(&address)
+		customers = append(customers, customer)
+	}
 
-        if customerModel.Active {
-            cust.Activate()
-        }
-        cust.AddRewardPoints(customerModel.RewardPoints)
-
-        customers[i] = cust
-    }
-    return customers, nil
+	return customers, nil
 }
