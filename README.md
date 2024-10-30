@@ -25,7 +25,8 @@ O projeto está organizado da seguinte
 │   ├── repository/          # Implementações dos repositórios para BD
 │   └── models/              # Modelos do GORM para BD
 │
-└── README.md                # Documentação ```
+└── README.md                # Documentação 
+```
 
 
 ### Principais Diretórios e Arquivos
