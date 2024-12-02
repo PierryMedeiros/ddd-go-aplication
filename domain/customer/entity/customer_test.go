@@ -60,11 +60,11 @@ func TestShouldAddRewardPoints(t *testing.T) {
     c, err := customer.NewCustomer("1", "Customer 1")
     assert.NoError(t, err)
 
-    assert.Equal(t, 0, c.GetRewardPoints())
+    assert.Equal(t, float64(0), c.GetRewardPoints())
 
     c.AddRewardPoints(10)
-    assert.Equal(t, 10, c.GetRewardPoints())
+    assert.Equal(t, float64(10), c.GetRewardPoints())
 
     c.AddRewardPoints(10)
-    assert.Equal(t, 20, c.GetRewardPoints())
+    assert.Equal(t, float64(20), c.GetRewardPoints())
 }

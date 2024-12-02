@@ -10,7 +10,7 @@ type Customer struct {
     name          string
     address       valueobject.Address
     active        bool
-    rewardPoints  int
+    rewardPoints  float64
 }
 
 func NewCustomer(id, name string) (*Customer, error) {
@@ -58,7 +58,7 @@ func (c *Customer) Deactivate() {
     c.active = false
 }
 
-func (c *Customer) AddRewardPoints(points int) {
+func (c *Customer) AddRewardPoints(points float64) {
     c.rewardPoints += points
 }
 
@@ -78,6 +78,6 @@ func (c *Customer) IsActive() bool {
     return c.active
 }
 
-func (c *Customer) GetRewardPoints() int {
+func (c *Customer) GetRewardPoints() float64 {
     return c.rewardPoints
 }

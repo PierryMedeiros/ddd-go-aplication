@@ -49,7 +49,7 @@ func TestFindCustomer(t *testing.T) {
         Zipcode:      "67890",
         City:         "Othertown",
         Active:       false,
-        RewardPoints: 50,
+        RewardPoints: float64(50),
     }
     db.Create(&customer)
 
@@ -63,7 +63,7 @@ func TestFindCustomer(t *testing.T) {
     assert.Equal(t, "67890", foundCustomer.Zipcode)
     assert.Equal(t, "Othertown", foundCustomer.City)
     assert.False(t, foundCustomer.Active)
-    assert.Equal(t, 50, foundCustomer.RewardPoints)
+    assert.Equal(t, float64(50), foundCustomer.RewardPoints)
 }
 
 func TestUpdateCustomer(t *testing.T) {
@@ -107,7 +107,7 @@ func TestDeleteCustomer(t *testing.T) {
         Zipcode:      "33445",
         City:         "Tinyville",
         Active:       true,
-        RewardPoints: 75,
+        RewardPoints: float64(75),
     }
     db.Create(&customer)
 

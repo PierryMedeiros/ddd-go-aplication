@@ -12,7 +12,7 @@ type CustomerModel struct {
     Zipcode      string `gorm:"not null"`
     City         string `gorm:"not null"`
     Active       bool   `gorm:"not null"`
-    RewardPoints int    `gorm:"not null"`
+    RewardPoints float64    `gorm:"not null"`
 }
 
 func (*CustomerModel) Migrate(db *gorm.DB) error {
