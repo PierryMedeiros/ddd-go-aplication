@@ -1,17 +1,17 @@
-FROM golang:alpine AS builder
+FROM golang:1.22-alpine AS builder
 
 WORKDIR /app
 
 COPY . .
 
-RUN go mod init fullcycle
+RUN go mod download
 
-RUN go build -o main .
+RUN go build -o /app/main ./cmd/main.go
 
 FROM scratch
 
 WORKDIR /app
 
-COPY --from=builder /app /app
+COPY --from=builder /app/main .
 
 CMD ["./main"]

@@ -17,7 +17,6 @@ func setupDatabase() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// Migração
 	if err := db.AutoMigrate(
 		&models.ProductModel{},
 		&models.CustomerModel{},
